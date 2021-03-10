@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Knight  extends Figure {
 
-    public Knight(Color color, Player owner) {
-        super(color, owner, 8, 3, 15, 1, 1);
+    public Knight(Color color) {
+        super(color, 8, 3, 15, 1, 1);
     }
 }

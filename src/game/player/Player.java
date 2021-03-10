@@ -17,12 +17,13 @@ public class Player {
 
     public Player(int id) {
         this.id = id;
-
         this.stats = new Stats();
         this.figures = new ArrayList<>();
 
 
     }
+
+
 
 
 }

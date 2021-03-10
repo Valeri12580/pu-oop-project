@@ -2,6 +2,8 @@ package game;
 
 import game.field.Field;
 import game.player.Player;
+import game.util.ChooseFigureDialog;
+import game.util.FigureInitializer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +12,13 @@ import java.awt.event.MouseListener;
 
 public class Game extends JFrame implements MouseListener {
     private Field[][] fields;
+
+
     private Player playerOne;
     private Player playerTwo;
+
+
+    private Player currentPlayer;
 
 
     public Game() throws HeadlessException {
@@ -22,9 +29,32 @@ public class Game extends JFrame implements MouseListener {
     public void start() {
         this.fields = new Field[7][9];
         initPlayers();
-
         initFields();
         initWindow();
+        initPlayerFigures();
+
+    }
+
+    private void initPlayerFigures() {
+        FigureInitializer playerOneInitializer = new FigureInitializer(Color.WHITE);
+        FigureInitializer playerTwoInitializer = new FigureInitializer(Color.GREEN);
+
+        FigureInitializer[] figures = {playerOneInitializer, playerTwoInitializer};
+
+        String[] players = {"Player 1", "Player 2"};
+
+        int current = 0;
+
+
+        for (int i = 0; i < 12; i++) {
+            if(figures[current].getFigures().size()==0){
+                continue;
+            }
+            ChooseFigureDialog dialog = new ChooseFigureDialog(this, true, players[current], figures[current]);
+            System.out.println(dialog.getChosenFigure());
+            current = current == 0 ? 1 : 0;
+        }
+
     }
 
 
@@ -32,15 +62,13 @@ public class Game extends JFrame implements MouseListener {
         generateSpecificPlayerField(0, 1);
         generateBattleField();
         generateSpecificPlayerField(5, 6);
-
-
     }
 
     private void generateBattleField() {
-        for (int row = 2; row <=4 ; row++) {
+        for (int row = 2; row <= 4; row++) {
             for (int col = 0; col < 9; col++) {
-                Field field=new Field(col,row,Color.RED);
-                fields[row][col]=field;
+                Field field = new Field(col, row, Color.RED);
+                fields[row][col] = field;
             }
         }
     }
@@ -58,9 +86,11 @@ public class Game extends JFrame implements MouseListener {
 
     }
 
+
     private void initPlayers() {
         this.playerOne = new Player(1);
         this.playerTwo = new Player(1);
+        this.currentPlayer = playerOne;
 
     }
 
@@ -74,6 +104,7 @@ public class Game extends JFrame implements MouseListener {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
 
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 9; col++) {

@@ -6,7 +6,7 @@ import game.player.Player;
 import java.awt.*;
 
 public class Dwarf extends Figure {
-    public Dwarf(Color color, Player owner) {
-        super(color, owner, 6, 2, 12, 2, 2);
+    public Dwarf(Color color) {
+        super(color, 6, 2, 12, 2, 2);
     }
 }

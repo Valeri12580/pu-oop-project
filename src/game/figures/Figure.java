@@ -17,9 +17,9 @@ public abstract class Figure {
     private int attackRange;
     private int speed;
 
-    public Figure(Color color,Player owner, int attackPower, int armor, int health, int attackRange, int speed) {
+    public Figure(Color color, int attackPower, int armor, int health, int attackRange, int speed) {
         this.color = color;
-        this.owner = owner;
+        this.owner = null;
         this.attackPower = attackPower;
         this.armor = armor;
         this.health = health;
@@ -28,4 +28,21 @@ public abstract class Figure {
 
     }
 
+    public String getTypeName(){
+
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public String toString() {
+        return "Figure{" +
+                "color=" + color +
+                ", owner=" + owner +
+                ", attackPower=" + attackPower +
+                ", armor=" + armor +
+                ", health=" + health +
+                ", attackRange=" + attackRange +
+                ", speed=" + speed +
+                '}';
+    }
 }
