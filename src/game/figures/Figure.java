@@ -6,6 +6,7 @@ import java.awt.*;
 
 public abstract class Figure {
 
+    private String type;
 
     private Color color;
 
@@ -17,7 +18,8 @@ public abstract class Figure {
     private int attackRange;
     private int speed;
 
-    public Figure(Color color, int attackPower, int armor, int health, int attackRange, int speed) {
+    public Figure(String type, Color color, int attackPower, int armor, int health, int attackRange, int speed) {
+        this.type = type;
         this.color = color;
         this.owner = null;
         this.attackPower = attackPower;
@@ -33,6 +35,11 @@ public abstract class Figure {
         return this.getClass().getSimpleName();
     }
 
+    public void render(Graphics g,int x,int y){
+        g.setColor(color);
+        g.drawString(type,x+50,y+50);
+    }
+
     @Override
     public String toString() {
         return "Figure{" +
@@ -44,5 +51,9 @@ public abstract class Figure {
                 ", attackRange=" + attackRange +
                 ", speed=" + speed +
                 '}';
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 }

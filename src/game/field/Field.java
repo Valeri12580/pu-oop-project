@@ -21,11 +21,24 @@ public class Field {
     }
 
     public void render(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, Field.FIELD_SIZE, Field.FIELD_SIZE);
+        if (currentFigure == null) {
+            g.setColor(color);
+            g.fillRect(x, y, Field.FIELD_SIZE, Field.FIELD_SIZE);
+        } else {
+            g.setColor(Color.white);
+            currentFigure.render(g, x, y);
+        }
 
         g.setColor(Color.BLACK);
         g.drawRect(x, y, Field.FIELD_SIZE, Field.FIELD_SIZE);
+    }
+
+    public boolean isFieldFree() {
+        return this.currentFigure ==null;
+    }
+
+    public void setCurrentFigure(Figure currentFigure) {
+        this.currentFigure = currentFigure;
     }
 
     public void setX(int x) {

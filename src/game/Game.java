@@ -1,6 +1,7 @@
 package game;
 
 import game.field.Field;
+import game.figures.Figure;
 import game.player.Player;
 import game.util.ChooseFigureDialog;
 import game.util.FigureInitializer;
@@ -12,6 +13,11 @@ import java.awt.event.MouseListener;
 
 public class Game extends JFrame implements MouseListener {
     private Field[][] fields;
+
+    private Figure chosenFigure;
+
+    private boolean isInitializationPhase;
+    private boolean isPlacedFigure;
 
 
     private Player playerOne;
@@ -27,33 +33,48 @@ public class Game extends JFrame implements MouseListener {
     }
 
     public void start() {
+
         this.fields = new Field[7][9];
         initPlayers();
         initFields();
         initWindow();
         initPlayerFigures();
+        System.out.println("Start the game");
 
     }
 
     private void initPlayerFigures() {
-        FigureInitializer playerOneInitializer = new FigureInitializer(Color.WHITE);
+        isInitializationPhase = true;
+        FigureInitializer playerOneInitializer = new FigureInitializer(Color.BLUE);
         FigureInitializer playerTwoInitializer = new FigureInitializer(Color.GREEN);
 
         FigureInitializer[] figures = {playerOneInitializer, playerTwoInitializer};
 
-        String[] players = {"Player 1", "Player 2"};
+        Player[] players = {playerOne, playerTwo};
 
         int current = 0;
 
 
         for (int i = 0; i < 12; i++) {
-            if(figures[current].getFigures().size()==0){
+            currentPlayer = players[current];
+
+
+            if (figures[current].getFigures().size() == 0) {
                 continue;
             }
-            ChooseFigureDialog dialog = new ChooseFigureDialog(this, true, players[current], figures[current]);
-            System.out.println(dialog.getChosenFigure());
+            ChooseFigureDialog dialog = new ChooseFigureDialog(this, true, currentPlayer.getId(), figures[current]);
+
+            chosenFigure = dialog.getChosenFigure();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             current = current == 0 ? 1 : 0;
         }
+        isInitializationPhase = false;
 
     }
 
@@ -88,8 +109,8 @@ public class Game extends JFrame implements MouseListener {
 
 
     private void initPlayers() {
-        this.playerOne = new Player(1);
-        this.playerTwo = new Player(1);
+        this.playerOne = new Player(1,5,6);
+        this.playerTwo = new Player(2,0,1);
         this.currentPlayer = playerOne;
 
     }
@@ -117,7 +138,32 @@ public class Game extends JFrame implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int row = e.getY() / Field.FIELD_SIZE;
+        int col = e.getX() / Field.FIELD_SIZE;
 
+       if(isInitializationPhase){
+           renderInvalidPositions();
+           setFigureAtPlayerBattleground(row, col);
+
+       }
+
+
+        repaint();
+    }
+
+    private void renderInvalidPositions() {
+
+    }
+
+    private void setFigureAtPlayerBattleground(int row, int col) {
+        if(currentPlayer.isInPlayerBattlefield(row) && fields[row][col].isFieldFree()){
+
+            chosenFigure.setOwner(currentPlayer);
+            fields[row][col].setCurrentFigure(chosenFigure);
+
+        }else{
+            JOptionPane.showMessageDialog(this,"Invalid position!");
+        }
     }
 
     @Override
