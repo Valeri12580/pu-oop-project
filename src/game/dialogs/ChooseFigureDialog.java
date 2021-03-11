@@ -1,6 +1,7 @@
-package game.util;
+package game.dialogs;
 
 import game.figures.Figure;
+import game.figures.FigureInitializer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package game.util;
+package game.figures;
 
 import game.figures.Figure;
 import game.figures.impl.Dwarf;

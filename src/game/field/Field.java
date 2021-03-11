@@ -10,6 +10,8 @@ public class Field {
     private int x;
     private int y;
 
+    private boolean isObstacle = false;
+
     private Color color;
     private Figure currentFigure;
 
@@ -23,6 +25,10 @@ public class Field {
     public void render(Graphics g) {
         if (currentFigure == null) {
             g.setColor(color);
+            if (isObstacle) {
+                g.setColor(Color.black);
+            }
+
             g.fillRect(x, y, Field.FIELD_SIZE, Field.FIELD_SIZE);
         } else {
             g.setColor(Color.white);
@@ -34,7 +40,15 @@ public class Field {
     }
 
     public boolean isFieldFree() {
-        return this.currentFigure ==null;
+        return this.currentFigure == null;
+    }
+
+    public Figure getCurrentFigure() {
+        return currentFigure;
+    }
+
+    public void setObstacle(boolean obstacle) {
+        isObstacle = obstacle;
     }
 
     public void setCurrentFigure(Figure currentFigure) {

@@ -53,6 +53,15 @@ public abstract class Figure {
                 '}';
     }
 
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void healFigure(int healPoints) {
+        health+=healPoints;
+
+    }
+
     public void setOwner(Player owner) {
         this.owner = owner;
     }

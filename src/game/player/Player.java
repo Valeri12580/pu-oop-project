@@ -17,11 +17,11 @@ public class Player {
     private Stats stats;
 
 
-    public Player(int id,int playerFieldFrom,int playerFieldTo) {
+    public Player(int id, int playerFieldFrom, int playerFieldTo) {
         this.id = id;
         this.stats = new Stats();
         this.figures = new ArrayList<>();
-        playerField=new Point(playerFieldFrom,playerFieldTo);
+        playerField = new Point(playerFieldFrom, playerFieldTo);
 
 
     }
@@ -30,8 +30,12 @@ public class Player {
         return id;
     }
 
-    public boolean isInPlayerBattlefield(int row){
+    public boolean isInPlayerBattlefield(int row) {
 
-        return  row<=playerField.getY() && row>= playerField.getX();
+        return row <= playerField.getY() && row >= playerField.getX();
+    }
+
+    public boolean areFiguresEmpty() {
+        return this.figures.size() == 0;
     }
 }
