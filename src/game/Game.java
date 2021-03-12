@@ -135,27 +135,7 @@ public class Game extends JFrame implements MouseListener {
                 continue;
             }
 
-            if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
-                if (action.equals(ActionEnum.HEAL)) {
-
-                    Random random = new Random();
-                    healUnit(random);
-                    System.out.println("Heal");
-                    System.out.println(currentField.getCurrentFigure().getHealth());
-                    if (random.nextInt(2) == 0) {
-                        currentField = null;
-                        desiredField = null;
-                        continue;
-                    }
-
-                }
-            } else {
-                currentField = null;
-                desiredField = null;
-                System.out.println("invalid!!");
-                continue;
-            }
 //
 //            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
 //            currentField = null;
@@ -181,6 +161,27 @@ public class Game extends JFrame implements MouseListener {
             currentField = fields[row][col];
 
         } else {
+
+            if (action.equals(ActionEnum.HEAL)) {
+                if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+
+                    Random random = new Random();
+                    healUnit(random);
+                    System.out.println("Heal");
+                    System.out.println(currentField.getCurrentFigure().getHealth());
+                    if (random.nextInt(2) == 0) {
+                        currentField = null;
+                        desiredField = null;
+
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"You cant heal other unit!");
+                    currentField = null;
+                    desiredField = null;
+                }
+
+
+            }
 
             desiredField = fields[row][col];
 
@@ -231,7 +232,7 @@ public class Game extends JFrame implements MouseListener {
 
 
                     currentFigure.attack(attackedFigure);
-                    JOptionPane.showMessageDialog(this,String.format("Left health %d",attackedFigure.getHealth()));
+                    JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
 
                     if (attackedFigure.getHealth() <= 0) {
 
