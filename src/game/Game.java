@@ -8,7 +8,7 @@ import game.figures.Figure;
 import game.figures.FigureInitializer;
 import game.player.Player;
 import game.stats.Stats;
-import game.util.ActionEnum;
+import game.util.Action;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class Game extends JFrame implements MouseListener {
 
     private Player playerOne;
     private Player playerTwo;
-    private ActionEnum action;
+    private Action action;
 
     private Field currentField;
     private Field desiredField;
@@ -163,7 +163,7 @@ public class Game extends JFrame implements MouseListener {
     }
 
     private void processSelectedOption(int row, int col) {
-        if (action.equals(ActionEnum.HEAL)) {
+        if (action.equals(Action.HEAL)) {
 
             processHealing();
         } else {
@@ -176,11 +176,11 @@ public class Game extends JFrame implements MouseListener {
             int currentRow = currentField.getY();
             int currentCol = currentField.getX();
 
-            if (ActionEnum.MOVE.equals(action) && currentFigure.getOwner().equals(currentPlayer)) {
+            if (Action.MOVE.equals(action) && currentFigure.getOwner().equals(currentPlayer)) {
 
                 processMoving(currentFigure, desiredRow, desiredCol, currentRow, currentCol);
 
-            } else if (ActionEnum.ATTACK.equals(action)) {
+            } else if (Action.ATTACK.equals(action)) {
 
                 processAttack(currentFigure);
             }
@@ -189,16 +189,18 @@ public class Game extends JFrame implements MouseListener {
     }
 
     private void processAttack(Figure currentFigure) {
-        if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+        if (desiredField.isObstacle()) {
+            desiredField.setObstacle(false);
+            JOptionPane.showMessageDialog(this, "The obstacle is destroyed!");
+        } else if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
             Figure attackedFigure = desiredField.getCurrentFigure();
 
-            if(currentFigure.isAttackValid(currentField.getY(),currentField.getX(),desiredField.getY(),desiredField.getX())){
+            if (currentFigure.isAttackValid(currentField.getY(), currentField.getX(), desiredField.getY(), desiredField.getX())) {
                 attack(currentFigure, attackedFigure);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Invalid attack");
             }
-
 
 
         } else {

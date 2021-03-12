@@ -1,14 +1,14 @@
 package game.dialogs;
 
-import game.util.ActionEnum;
+import game.util.Action;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ChooseActionDialog extends JDialog {
-    public static ActionEnum[] actions = {ActionEnum.ATTACK, ActionEnum.HEAL, ActionEnum.MOVE};
+    public static Action[] actions = {Action.ATTACK, Action.HEAL, Action.MOVE};
 
-    private ActionEnum chosenAction;
+    private Action chosenAction;
 
     public ChooseActionDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
@@ -23,7 +23,7 @@ public class ChooseActionDialog extends JDialog {
 
     private void setButtons() {
 
-        for (ActionEnum action : actions) {
+        for (Action action : actions) {
             JButton jButton = new JButton(action.toString());
             jButton.addActionListener((actionEvent) -> {
                 chosenAction = action;
@@ -34,7 +34,7 @@ public class ChooseActionDialog extends JDialog {
 
     }
 
-    public ActionEnum getChosenAction() {
+    public Action getChosenAction() {
         return chosenAction;
     }
 }

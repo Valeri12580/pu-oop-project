@@ -1,6 +1,6 @@
 package game.util;
 
-public enum ActionEnum {
+public enum Action {
     HEAL,
     MOVE,
     ATTACK
