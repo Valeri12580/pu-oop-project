@@ -40,6 +40,9 @@ public abstract class Figure {
         g.drawString(type,x+50,y+50);
     }
 
+
+    public abstract boolean isValidMove(int currentRow,int currentCol,int desiredRow,int desiredCol);
+
     @Override
     public String toString() {
         return "Figure{" +

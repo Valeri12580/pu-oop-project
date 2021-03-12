@@ -22,6 +22,10 @@ public class Field {
         this.currentFigure = null;
     }
 
+    public Field(Figure currentFigure) {
+        this.currentFigure = currentFigure;
+    }
+
     public void render(Graphics g) {
         if (currentFigure == null) {
             g.setColor(color);
@@ -37,6 +41,10 @@ public class Field {
 
         g.setColor(Color.BLACK);
         g.drawRect(x, y, Field.FIELD_SIZE, Field.FIELD_SIZE);
+    }
+
+    public boolean isObstacle() {
+        return isObstacle;
     }
 
     public boolean isFieldFree() {
