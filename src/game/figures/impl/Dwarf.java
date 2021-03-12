@@ -16,4 +16,11 @@ public class Dwarf extends Figure {
 
         return (resultY==2 && resultX==0)||(resultY==0 && resultX==2);
     }
+
+    @Override
+    public boolean isAttackValid(int currentFigureRow, int currentFigureCol, int attackedFigureRow, int attackedFigureCol) {
+        int resultY=Math.abs(currentFigureRow-attackedFigureRow);
+        int resultX=Math.abs(currentFigureCol-attackedFigureCol);
+        return (resultY==2 && resultX==0)||(resultY==0 && resultX==2);
+    }
 }

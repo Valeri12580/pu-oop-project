@@ -76,6 +76,8 @@ public abstract class Figure {
         this.owner = owner;
     }
 
+    public  abstract  boolean isAttackValid(int currentFigureRow, int currentFigureCol, int attackedFigureRow, int attackedFigureCol);
+
     public int attack(Figure attackedFigure) {
         int damage=rowDice(attackedFigure.health,this.attackPower- attackedFigure.armor);
 

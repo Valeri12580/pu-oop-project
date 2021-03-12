@@ -190,23 +190,16 @@ public class Game extends JFrame implements MouseListener {
 
     private void processAttack(Figure currentFigure) {
         if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+
             Figure attackedFigure = desiredField.getCurrentFigure();
 
-
-            int points = currentFigure.attack(attackedFigure);
-            currentPlayer.increaseScore(points);
-            JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
-            this.stats.increaseNumberOfRounds();
-
-            if (attackedFigure.getHealth() <= 0) {
-                desiredField.setCurrentFigure(null);
-                stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
-
-                removeFigureFromPlayerCollection(attackedFigure, currentPlayer.equals(playerOne) ? playerTwo : playerOne);
-
+            if(currentFigure.isAttackValid(currentField.getY(),currentField.getX(),desiredField.getY(),desiredField.getX())){
+                attack(currentFigure, attackedFigure);
+            }else{
+                JOptionPane.showMessageDialog(this, "Invalid attack");
             }
 
-            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+
 
         } else {
             JOptionPane.showMessageDialog(this, "You cant choose your units");
@@ -214,6 +207,23 @@ public class Game extends JFrame implements MouseListener {
 
         }
         clearChosenFields();
+    }
+
+    private void attack(Figure currentFigure, Figure attackedFigure) {
+        int points = currentFigure.attack(attackedFigure);
+
+        currentPlayer.increaseScore(points);
+        JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
+        this.stats.increaseNumberOfRounds();
+
+        if (attackedFigure.getHealth() <= 0) {
+            desiredField.setCurrentFigure(null);
+            stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
+
+            removeFigureFromPlayerCollection(attackedFigure, currentPlayer.equals(playerOne) ? playerTwo : playerOne);
+
+        }
+        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
     }
 
     private void processMoving(Figure currentFigure, int desiredRow, int desiredCol, int currentRow, int currentCol) {

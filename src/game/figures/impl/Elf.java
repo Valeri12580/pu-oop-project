@@ -22,4 +22,11 @@ public class Elf extends Figure {
 
         return mainDiagonalResult || gDialognalResult;
     }
+
+    @Override
+    public boolean isAttackValid(int currentFigureRow, int currentFigureCol, int attackedFigureRow, int attackedFigureCol) {
+        int resultY=Math.abs(currentFigureRow-attackedFigureRow);
+        int resultX=Math.abs(currentFigureCol-attackedFigureCol);
+        return (resultY==3 && resultX==0)||(resultY==0 && resultX==3);
+    }
 }
