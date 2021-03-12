@@ -26,15 +26,28 @@ public class Player {
         return id;
     }
 
+    /**
+     * check if the position is in the player battlefield
+     * @param row
+     * @return result
+     */
     public boolean isInPlayerBattlefield(int row) {
 
         return row <= playerField.getY() && row >= playerField.getX();
     }
 
+    /**
+     * check if figures are empty
+     * @return value
+     */
     public boolean areFiguresEmpty() {
         return this.figures.size() == 0;
     }
 
+    /**
+     * remove figure
+     * @param figure figure
+     */
     public void removeFigure(Figure figure) {
         this.figures.remove(figure);
     }
@@ -42,10 +55,19 @@ public class Player {
     public void addFigure(Figure figure) {
         this.figures.add(figure);
     }
+
+    /**
+     * increase the score
+     * @param points points
+     */
     public void increaseScore(int points){
         this.score+=points;
     }
 
+    /**
+     * getter
+     * @return scire
+     */
     public int getScore() {
         return score;
     }

@@ -23,6 +23,10 @@ public class EndGameDialog extends JDialog {
 
     }
 
+    /**
+     * set buttons
+     * @param actionListener listener
+     */
     private void setButtons(ActionListener actionListener) {
 
         JButton restart = new JButton("Restart");
@@ -37,6 +41,13 @@ public class EndGameDialog extends JDialog {
         this.add(close);
     }
 
+    /**
+     * construct label
+     * @param stats stats instance
+     * @param playerOne playerOne instance
+     * @param playerTwo playerTwo instance
+     * @return JLabel
+     */
     private JLabel constructJLabelWithResults(Stats stats, Player playerOne, Player playerTwo){
         String text=String.format("Game rounds: %d\nPlayer 1 : \n-score: %d \n-Dead figures: %s\nPlayer 2 :\n-score: %d\n-Dead figures: %s "
                 ,stats.getNumberOfRounds(),playerOne.getScore() ,stats.getDestroyedOFirstPlayerFigures().toString(),

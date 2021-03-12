@@ -25,6 +25,11 @@ public class Stats {
         numberOfRounds++;
     }
 
+    /**
+     * add destroyed figure to the stats
+     * @param figure figure
+     * @param playerId player
+     */
     public void addDestroyedFigure(Figure figure, int playerId) {
         if (playerId == 1) {
             destroyedSecondFigures.add(figure);
@@ -33,14 +38,26 @@ public class Stats {
         }
     }
 
+    /**
+     * getter
+     * @return destroyed figures of first player
+     */
     public List<Figure> getDestroyedOFirstPlayerFigures() {
         return destroyedOFirstPlayerFigures;
     }
 
+    /**
+     * getter
+     * @return destroyed figures of second player
+     */
     public List<Figure> getDestroyedSecondFigures() {
         return destroyedSecondFigures;
     }
 
+    /**
+     * get the number of rounds
+     * @return rounds
+     */
     public int getNumberOfRounds() {
         return numberOfRounds;
     }

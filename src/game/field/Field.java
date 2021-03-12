@@ -26,6 +26,10 @@ public class Field {
         this.currentFigure = currentFigure;
     }
 
+    /**
+     * render method
+     * @param g
+     */
     public void render(Graphics g) {
         if (currentFigure == null) {
             g.setColor(color);

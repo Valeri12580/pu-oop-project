@@ -21,6 +21,9 @@ public class ChooseActionDialog extends JDialog {
         super.setVisible(true);
     }
 
+    /**
+     * set buttons
+     */
     private void setButtons() {
 
         for (Action action : actions) {

@@ -23,6 +23,10 @@ public class FigureInitializer {
     }
 
 
+    /**
+     * get figures
+     * @return figures
+     */
     public List<Figure> getFigures() {
         List<Figure> all = new ArrayList<>();
         all.addAll(knights);
@@ -32,6 +36,11 @@ public class FigureInitializer {
     }
 
 
+    /**
+     * get specific figures
+     * @param type type of the figure
+     * @return value
+     */
     public Figure getSpecificFigure(String type) {
         Figure figure = switch (type) {
             case "Knight" -> this.knights.pop();

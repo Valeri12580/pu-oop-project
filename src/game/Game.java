@@ -131,15 +131,15 @@ public class Game extends JFrame implements MouseListener {
             }
 
 
-            if (currentField == null) {
-                continue;
-            }
-
         }
 
         showEndGameResults();
     }
 
+    /**
+     * event handler
+     * @param e handler
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -162,6 +162,11 @@ public class Game extends JFrame implements MouseListener {
         repaint();
     }
 
+    /**
+     * process selection of one option
+     * @param row row
+     * @param col col
+     */
     private void processSelectedOption(int row, int col) {
         if (action.equals(Action.HEAL)) {
 
@@ -188,10 +193,14 @@ public class Game extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * method that process the attack
+     * @param currentFigure current figure
+     */
     private void processAttack(Figure currentFigure) {
         if (desiredField.isObstacle()) {
             desiredField.setObstacle(false);
-            JOptionPane.showMessageDialog(this, "The obstacle is destroyed!");
+            showMessageOnScreen( "The obstacle is destroyed!");
         } else if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
             Figure attackedFigure = desiredField.getCurrentFigure();
@@ -199,23 +208,28 @@ public class Game extends JFrame implements MouseListener {
             if (currentFigure.isAttackValid(currentField.getY(), currentField.getX(), desiredField.getY(), desiredField.getX())) {
                 attack(currentFigure, attackedFigure);
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid attack");
+                showMessageOnScreen( "Invalid attack");
             }
 
 
         } else {
-            JOptionPane.showMessageDialog(this, "You cant choose your units");
+            showMessageOnScreen( "You cant choose your units");
 
 
         }
         clearChosenFields();
     }
 
+    /**
+     * attack method
+     * @param currentFigure current figure
+     * @param attackedFigure target figure
+     */
     private void attack(Figure currentFigure, Figure attackedFigure) {
         int points = currentFigure.attack(attackedFigure);
 
         currentPlayer.increaseScore(points);
-        JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
+        showMessageOnScreen( String.format("Left health %d", attackedFigure.getHealth()));
         this.stats.increaseNumberOfRounds();
 
         if (attackedFigure.getHealth() <= 0) {
@@ -228,17 +242,25 @@ public class Game extends JFrame implements MouseListener {
         currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
     }
 
+    /**
+     * method that process moving
+     * @param currentFigure currentFigure to be moved
+     * @param desiredRow desired row
+     * @param desiredCol desired col
+     * @param currentRow current row
+     * @param currentCol current col
+     */
     private void processMoving(Figure currentFigure, int desiredRow, int desiredCol, int currentRow, int currentCol) {
         if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
 
             if (desiredField.isObstacle()) {
 
-                JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
+                showMessageOnScreen("Obstacle in your desired destination,destroy it!");
                 //iznesi tezi otgore
 
 
             } else if (!desiredField.isFieldFree()) {
-                JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
+                showMessageOnScreen( "Opponent unit in your desired destination,kill it!");
 
             } else {
                 this.stats.increaseNumberOfRounds();
@@ -250,29 +272,32 @@ public class Game extends JFrame implements MouseListener {
 
         } else {
 
-            JOptionPane.showMessageDialog(this, "Invalid move!");
+            showMessageOnScreen("Invalid move!");
 
 
         }
         clearChosenFields();
     }
 
+    /**
+     * heal method
+     */
     private void processHealing() {
         if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
             Random random = new Random();
             healUnit(random);
 
-            JOptionPane.showMessageDialog(this, String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
+            showMessageOnScreen( String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
             this.stats.increaseNumberOfRounds();
 
             if (random.nextInt(2) == 0) {
-                JOptionPane.showMessageDialog(this, "You are lucky!Your opponent lost turn!");
+                showMessageOnScreen( "You are lucky!Your opponent lost turn!");
 
             } else {
                 currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
             }
         } else {
-            JOptionPane.showMessageDialog(this, "You cant heal other unit!");
+            showMessageOnScreen("You cant heal other unit!");
 
         }
 
@@ -280,13 +305,29 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * remove figures from player collections
+     * @param figure figure
+     * @param player player
+     */
     private void removeFigureFromPlayerCollection(Figure figure, Player player) {
         player.removeFigure(figure);
     }
 
+    /**
+     * clear chosen fields
+     */
     private void clearChosenFields() {
         currentField = null;
         desiredField = null;
+    }
+
+    /**
+     * show messages of the screen
+     * @param message text
+     */
+    private void showMessageOnScreen(String message){
+        JOptionPane.showMessageDialog(this,message);
     }
 
 
@@ -414,7 +455,7 @@ public class Game extends JFrame implements MouseListener {
             fields[row][col].setCurrentFigure(currentField.getCurrentFigure());
 
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid position!");
+            showMessageOnScreen( "Invalid position!");
         }
     }
 
