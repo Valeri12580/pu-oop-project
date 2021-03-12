@@ -19,7 +19,7 @@ public abstract class Figure {
     private int attackRange;
     private int speed;
 
-    private int score=0;
+
 
     public Figure(String type, Color color, int attackPower, int armor, int health, int attackRange, int speed) {
         this.type = type;
@@ -48,15 +48,7 @@ public abstract class Figure {
 
     @Override
     public String toString() {
-        return "Figure{" +
-                "color=" + color +
-                ", owner=" + owner +
-                ", attackPower=" + attackPower +
-                ", armor=" + armor +
-                ", health=" + health +
-                ", attackRange=" + attackRange +
-                ", speed=" + speed +
-                '}';
+        return String.format("Figure: %s",this.getClass().getSimpleName());
     }
 
     /**
@@ -84,12 +76,12 @@ public abstract class Figure {
         this.owner = owner;
     }
 
-    public void attack(Figure attackedFigure) {
+    public int attack(Figure attackedFigure) {
         int damage=rowDice(attackedFigure.health,this.attackPower- attackedFigure.armor);
 
         attackedFigure.setHealthAfterAttack(damage);
-        this.score+=damage;
 
+        return damage;
 
     }
 
@@ -120,7 +112,5 @@ public abstract class Figure {
         this.health-=damage;
     }
 
-    public int getScore() {
-        return score;
-    }
+
 }

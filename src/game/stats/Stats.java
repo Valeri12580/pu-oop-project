@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stats {
-    private int firstPlayerPoints;
-    private int secondPlayerPoints;
+
     private int numberOfRounds;
     private List<Figure> destroyedOFirstPlayerFigures;
     private List<Figure> destroyedSecondFigures;
@@ -15,8 +14,6 @@ public class Stats {
     public Stats() {
 
         this.numberOfRounds = 0;
-        this.secondPlayerPoints = 0;
-        this.firstPlayerPoints = 0;
         this.destroyedSecondFigures = new ArrayList<>();
         this.destroyedOFirstPlayerFigures = new ArrayList<>();
     }
@@ -34,6 +31,14 @@ public class Stats {
         } else {
             destroyedOFirstPlayerFigures.add(figure);
         }
+    }
+
+    public List<Figure> getDestroyedOFirstPlayerFigures() {
+        return destroyedOFirstPlayerFigures;
+    }
+
+    public List<Figure> getDestroyedSecondFigures() {
+        return destroyedSecondFigures;
     }
 
     public int getNumberOfRounds() {
