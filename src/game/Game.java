@@ -63,7 +63,7 @@ public class Game extends JFrame implements MouseListener {
      * showing end game results
      */
     private void showEndGameResults() {
-        EndGameDialog endGameDialog = new EndGameDialog(this,stats,playerOne,playerTwo, (e) -> {
+        EndGameDialog endGameDialog = new EndGameDialog(this, stats, playerOne, playerTwo, (e) -> {
             dispose();
 
             this.start();
@@ -154,100 +154,7 @@ public class Game extends JFrame implements MouseListener {
 
         } else {
 
-            if (action.equals(ActionEnum.HEAL)) {
-
-                if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
-                    Random random = new Random();
-                    healUnit(random);
-
-                    JOptionPane.showMessageDialog(this, String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
-                    this.stats.increaseNumberOfRounds();
-
-                    if (random.nextInt(2) == 0) {
-                        JOptionPane.showMessageDialog(this, "You are lucky!Your opponent lost turn!");
-
-                    }else{
-                        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "You cant heal other unit!");
-
-                }
-
-                clearChosenFields();
-            } else {
-
-                desiredField = fields[row][col];
-
-                Figure currentFigure = currentField.getCurrentFigure();
-
-                int desiredRow = desiredField.getY();
-                int desiredCol = desiredField.getX();
-                int currentRow = currentField.getY();
-                int currentCol = currentField.getX();
-
-                if (ActionEnum.MOVE.equals(action) && currentFigure.getOwner().equals(currentPlayer)) {
-
-                    if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
-
-                        if (desiredField.isObstacle()) {
-
-                            JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
-                            //iznesi tezi otgore
-
-
-                        } else if (!desiredField.isFieldFree()) {
-                            JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
-
-                        } else {
-                            this.stats.increaseNumberOfRounds();
-                            desiredField.setCurrentFigure(currentFigure);
-                            currentField.setCurrentFigure(null);
-                            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-
-                        }
-
-                    } else {
-
-                        JOptionPane.showMessageDialog(this, "Invalid move!");
-
-
-
-                    }
-                    currentField = null;
-                    desiredField = null;
-
-                } else if
-                (ActionEnum.ATTACK.equals(action)) {
-
-                    if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
-                        Figure attackedFigure = desiredField.getCurrentFigure();
-
-
-                        int points=currentFigure.attack(attackedFigure);
-                        currentPlayer.increaseScore(points);
-                        JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
-                        this.stats.increaseNumberOfRounds();
-
-                        if (attackedFigure.getHealth() <= 0) {
-                            desiredField.setCurrentFigure(null);
-                            stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
-
-                            removeFigureFromPlayerCollection(attackedFigure,currentPlayer.equals(playerOne) ? playerTwo : playerOne);
-
-                        }
-
-                        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-
-                    } else {
-                        JOptionPane.showMessageDialog(this, "You cant choose your units");
-
-
-                    }
-                    clearChosenFields();
-                }
-
-            }
+            processSelectedOption(row, col);
 
         }
 
@@ -255,8 +162,113 @@ public class Game extends JFrame implements MouseListener {
         repaint();
     }
 
+    private void processSelectedOption(int row, int col) {
+        if (action.equals(ActionEnum.HEAL)) {
 
-    private void removeFigureFromPlayerCollection(Figure figure,Player player){
+            processHealing();
+        } else {
+            desiredField = fields[row][col];
+
+            Figure currentFigure = currentField.getCurrentFigure();
+
+            int desiredRow = desiredField.getY();
+            int desiredCol = desiredField.getX();
+            int currentRow = currentField.getY();
+            int currentCol = currentField.getX();
+
+            if (ActionEnum.MOVE.equals(action) && currentFigure.getOwner().equals(currentPlayer)) {
+
+                processMoving(currentFigure, desiredRow, desiredCol, currentRow, currentCol);
+
+            } else if (ActionEnum.ATTACK.equals(action)) {
+
+                processAttack(currentFigure);
+            }
+
+        }
+    }
+
+    private void processAttack(Figure currentFigure) {
+        if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+            Figure attackedFigure = desiredField.getCurrentFigure();
+
+
+            int points = currentFigure.attack(attackedFigure);
+            currentPlayer.increaseScore(points);
+            JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
+            this.stats.increaseNumberOfRounds();
+
+            if (attackedFigure.getHealth() <= 0) {
+                desiredField.setCurrentFigure(null);
+                stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
+
+                removeFigureFromPlayerCollection(attackedFigure, currentPlayer.equals(playerOne) ? playerTwo : playerOne);
+
+            }
+
+            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+
+        } else {
+            JOptionPane.showMessageDialog(this, "You cant choose your units");
+
+
+        }
+        clearChosenFields();
+    }
+
+    private void processMoving(Figure currentFigure, int desiredRow, int desiredCol, int currentRow, int currentCol) {
+        if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
+
+            if (desiredField.isObstacle()) {
+
+                JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
+                //iznesi tezi otgore
+
+
+            } else if (!desiredField.isFieldFree()) {
+                JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
+
+            } else {
+                this.stats.increaseNumberOfRounds();
+                desiredField.setCurrentFigure(currentFigure);
+                currentField.setCurrentFigure(null);
+                currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(this, "Invalid move!");
+
+
+        }
+        clearChosenFields();
+    }
+
+    private void processHealing() {
+        if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+            Random random = new Random();
+            healUnit(random);
+
+            JOptionPane.showMessageDialog(this, String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
+            this.stats.increaseNumberOfRounds();
+
+            if (random.nextInt(2) == 0) {
+                JOptionPane.showMessageDialog(this, "You are lucky!Your opponent lost turn!");
+
+            } else {
+                currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "You cant heal other unit!");
+
+        }
+
+        clearChosenFields();
+    }
+
+
+    private void removeFigureFromPlayerCollection(Figure figure, Player player) {
         player.removeFigure(figure);
     }
 
@@ -376,8 +388,6 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
-
-
     /**
      * set figures at player battefield
      *
@@ -388,7 +398,7 @@ public class Game extends JFrame implements MouseListener {
         if (currentPlayer.isInPlayerBattlefield(row) && fields[row][col].isFieldFree()) {
 
             currentField.getCurrentFigure().setOwner(currentPlayer);
-            currentPlayer.addFigure( currentField.getCurrentFigure());
+            currentPlayer.addFigure(currentField.getCurrentFigure());
             fields[row][col].setCurrentFigure(currentField.getCurrentFigure());
 
         } else {
