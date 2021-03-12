@@ -12,7 +12,7 @@ public class ChooseFigureDialog extends JDialog {
     private String chosenFigure = "";
 
     public ChooseFigureDialog(Frame owner, boolean modal, int playerId, FigureInitializer availableFigures) {
-        super(owner, String.format("Player %d selection",playerId), modal);
+        super(owner, String.format("Player %d selection", playerId), modal);
         this.availableFigures = availableFigures;
 
         super.setLayout(new FlowLayout());
@@ -42,6 +42,7 @@ public class ChooseFigureDialog extends JDialog {
 
     /**
      * get figure
+     *
      * @return specific figure
      */
     public Figure getChosenFigure() {

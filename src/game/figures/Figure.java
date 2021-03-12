@@ -20,7 +20,6 @@ public abstract class Figure {
     private int speed;
 
 
-
     public Figure(String type, Color color, int attackPower, int armor, int health, int attackRange, int speed) {
         this.type = type;
         this.color = color;
@@ -35,9 +34,10 @@ public abstract class Figure {
 
     /**
      * get the game of the class
+     *
      * @return class name
      */
-    public String getTypeName(){
+    public String getTypeName() {
 
         return this.getClass().getSimpleName();
     }
@@ -45,29 +45,31 @@ public abstract class Figure {
     /*
     render method
      */
-    public void render(Graphics g,int x,int y){
+    public void render(Graphics g, int x, int y) {
         g.setColor(color);
-        g.drawString(type,x+50,y+50);
+        g.drawString(type, x + 50, y + 50);
     }
 
 
     /**
      * check for valid move
+     *
      * @param currentRow current row of the figure
      * @param currentCol current col of the figure
      * @param desiredRow desired row of the figure
      * @param desiredCol desirec col of the figure
      * @return result
      */
-    public abstract boolean isValidMove(int currentRow,int currentCol,int desiredRow,int desiredCol);
+    public abstract boolean isValidMove(int currentRow, int currentCol, int desiredRow, int desiredCol);
 
     @Override
     public String toString() {
-        return String.format("Figure: %s",this.getClass().getSimpleName());
+        return String.format("Figure: %s", this.getClass().getSimpleName());
     }
 
     /**
      * get the owner
+     *
      * @return the owner of the figure
      */
     public Player getOwner() {
@@ -76,30 +78,33 @@ public abstract class Figure {
 
     /**
      * heal method
+     *
      * @param healPoints how much points to be recovered
      */
     public void healFigure(int healPoints) {
-        health+=healPoints;
+        health += healPoints;
 
     }
 
     /**
      * set owner
+     *
      * @param owner owner
      */
     public void setOwner(Player owner) {
         this.owner = owner;
     }
 
-    public  abstract  boolean isAttackValid(int currentFigureRow, int currentFigureCol, int attackedFigureRow, int attackedFigureCol);
+    public abstract boolean isAttackValid(int currentFigureRow, int currentFigureCol, int attackedFigureRow, int attackedFigureCol);
 
     /**
      * process attack
+     *
      * @param attackedFigure target of the attack
      * @return damage
      */
     public int attack(Figure attackedFigure) {
-        int damage=rowDice(attackedFigure.health,this.attackPower- attackedFigure.armor);
+        int damage = rowDice(attackedFigure.health, this.attackPower - attackedFigure.armor);
 
         attackedFigure.setHealthAfterAttack(damage);
 
@@ -109,23 +114,24 @@ public abstract class Figure {
 
     /**
      * row dice
+     *
      * @param health heath of the figure
      * @param damage damage to be done
      * @return actual damage
      */
-    private int rowDice(int health,int damage){
-        int maxDiceValue=(health/3)+1;
-        Random random=new Random();
-        int first =random.nextInt(maxDiceValue);
-        int second =random.nextInt(maxDiceValue);
-        int third =random.nextInt(maxDiceValue);
+    private int rowDice(int health, int damage) {
+        int maxDiceValue = (health / 3) + 1;
+        Random random = new Random();
+        int first = random.nextInt(maxDiceValue);
+        int second = random.nextInt(maxDiceValue);
+        int third = random.nextInt(maxDiceValue);
 
-        int sum=first+second+third;
+        int sum = first + second + third;
 
-        if(sum==health){
+        if (sum == health) {
             return 0;
-        }else if(sum==1){
-            return damage/2;
+        } else if (sum == 1) {
+            return damage / 2;
         }
 
         return damage;
@@ -138,10 +144,11 @@ public abstract class Figure {
 
     /**
      * set new health after attack
+     *
      * @param damage value to be removed from the health
      */
-    public void setHealthAfterAttack(int damage){
-        this.health-=damage;
+    public void setHealthAfterAttack(int damage) {
+        this.health -= damage;
     }
 
 

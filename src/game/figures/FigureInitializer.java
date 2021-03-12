@@ -1,6 +1,5 @@
 package game.figures;
 
-import game.figures.Figure;
 import game.figures.impl.Dwarf;
 import game.figures.impl.Elf;
 import game.figures.impl.Knight;
@@ -25,6 +24,7 @@ public class FigureInitializer {
 
     /**
      * get figures
+     *
      * @return figures
      */
     public List<Figure> getFigures() {
@@ -38,6 +38,7 @@ public class FigureInitializer {
 
     /**
      * get specific figures
+     *
      * @param type type of the figure
      * @return value
      */

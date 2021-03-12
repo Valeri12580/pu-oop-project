@@ -27,7 +27,8 @@ public class Stats {
 
     /**
      * add destroyed figure to the stats
-     * @param figure figure
+     *
+     * @param figure   figure
      * @param playerId player
      */
     public void addDestroyedFigure(Figure figure, int playerId) {
@@ -40,6 +41,7 @@ public class Stats {
 
     /**
      * getter
+     *
      * @return destroyed figures of first player
      */
     public List<Figure> getDestroyedOFirstPlayerFigures() {
@@ -48,6 +50,7 @@ public class Stats {
 
     /**
      * getter
+     *
      * @return destroyed figures of second player
      */
     public List<Figure> getDestroyedSecondFigures() {
@@ -56,6 +59,7 @@ public class Stats {
 
     /**
      * get the number of rounds
+     *
      * @return rounds
      */
     public int getNumberOfRounds() {

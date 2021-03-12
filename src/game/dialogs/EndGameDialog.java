@@ -6,7 +6,6 @@ import game.stats.Stats;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 
 public class EndGameDialog extends JDialog {
 
@@ -14,10 +13,10 @@ public class EndGameDialog extends JDialog {
     public EndGameDialog(Frame owner, Stats stats, Player playerOne, Player playerTwo, ActionListener actionListener) {
         super(owner, "The game is over", true);
         super.setLayout(new FlowLayout());
-        super.add(constructJLabelWithResults(stats,playerOne,playerTwo));
+        super.add(constructJLabelWithResults(stats, playerOne, playerTwo));
         setButtons(actionListener);
 
-        super.setSize(500, 500);
+        super.setSize(800, 500);
         super.setVisible(true);
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -25,6 +24,7 @@ public class EndGameDialog extends JDialog {
 
     /**
      * set buttons
+     *
      * @param actionListener listener
      */
     private void setButtons(ActionListener actionListener) {
@@ -43,17 +43,18 @@ public class EndGameDialog extends JDialog {
 
     /**
      * construct label
-     * @param stats stats instance
+     *
+     * @param stats     stats instance
      * @param playerOne playerOne instance
      * @param playerTwo playerTwo instance
      * @return JLabel
      */
-    private JLabel constructJLabelWithResults(Stats stats, Player playerOne, Player playerTwo){
-        String text=String.format("Game rounds: %d\nPlayer 1 : \n-score: %d \n-Dead figures: %s\nPlayer 2 :\n-score: %d\n-Dead figures: %s "
-                ,stats.getNumberOfRounds(),playerOne.getScore() ,stats.getDestroyedOFirstPlayerFigures().toString(),
+    private JLabel constructJLabelWithResults(Stats stats, Player playerOne, Player playerTwo) {
+        String text = String.format("Game rounds: %d\nPlayer 1 : \n-score: %d \n-Dead figures: %s\nPlayer 2 :\n-score: %d\n-Dead figures: %s "
+                , stats.getNumberOfRounds(), playerOne.getScore(), stats.getDestroyedOFirstPlayerFigures().toString(),
                 playerTwo.getScore(),
                 stats.getDestroyedSecondFigures().toString()
-                );
+        );
 
 
         return new JLabel(text);

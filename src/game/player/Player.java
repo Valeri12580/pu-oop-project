@@ -15,7 +15,7 @@ public class Player {
 
     public Player(int id, int playerFieldFrom, int playerFieldTo) {
         this.id = id;
-        this.score=0;
+        this.score = 0;
         this.figures = new ArrayList<>();
         playerField = new Point(playerFieldFrom, playerFieldTo);
 
@@ -28,6 +28,7 @@ public class Player {
 
     /**
      * check if the position is in the player battlefield
+     *
      * @param row
      * @return result
      */
@@ -38,6 +39,7 @@ public class Player {
 
     /**
      * check if figures are empty
+     *
      * @return value
      */
     public boolean areFiguresEmpty() {
@@ -46,6 +48,7 @@ public class Player {
 
     /**
      * remove figure
+     *
      * @param figure figure
      */
     public void removeFigure(Figure figure) {
@@ -58,14 +61,16 @@ public class Player {
 
     /**
      * increase the score
+     *
      * @param points points
      */
-    public void increaseScore(int points){
-        this.score+=points;
+    public void increaseScore(int points) {
+        this.score += points;
     }
 
     /**
      * getter
+     *
      * @return scire
      */
     public int getScore() {

@@ -44,7 +44,6 @@ public class Game extends JFrame implements MouseListener {
      * start the game
      */
     public void start() {
-
         this.stats = new Stats();
         this.fields = new Field[7][9];
         initPlayers();
@@ -55,7 +54,6 @@ public class Game extends JFrame implements MouseListener {
 
         initPlayerFigures();
         startPlayersTurns();
-
 
     }
 
@@ -138,6 +136,7 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * event handler
+     *
      * @param e handler
      */
     @Override
@@ -164,6 +163,7 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * process selection of one option
+     *
      * @param row row
      * @param col col
      */
@@ -185,7 +185,7 @@ public class Game extends JFrame implements MouseListener {
 
                 processMoving(currentFigure, desiredRow, desiredCol, currentRow, currentCol);
 
-            } else if (Action.ATTACK.equals(action)) {
+            } else if (Action.ATTACK.equals(action) ) {
 
                 processAttack(currentFigure);
             }
@@ -195,25 +195,27 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * method that process the attack
+     *
      * @param currentFigure current figure
      */
     private void processAttack(Figure currentFigure) {
-        if (desiredField.isObstacle()) {
+
+        if (desiredField.isObstacle() && currentFigure.isAttackValid(currentField.getY(), currentField.getX(), desiredField.getY(), desiredField.getX())) {
             desiredField.setObstacle(false);
-            showMessageOnScreen( "The obstacle is destroyed!");
-        } else if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+            showMessageOnScreen("The obstacle is destroyed!");
+        } else if ( desiredField.getCurrentFigure() !=null && !desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
             Figure attackedFigure = desiredField.getCurrentFigure();
 
             if (currentFigure.isAttackValid(currentField.getY(), currentField.getX(), desiredField.getY(), desiredField.getX())) {
                 attack(currentFigure, attackedFigure);
             } else {
-                showMessageOnScreen( "Invalid attack");
+                showMessageOnScreen("Invalid attack");
             }
 
 
         } else {
-            showMessageOnScreen( "You cant choose your units");
+            showMessageOnScreen("Invalid");
 
 
         }
@@ -222,14 +224,15 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * attack method
-     * @param currentFigure current figure
+     *
+     * @param currentFigure  current figure
      * @param attackedFigure target figure
      */
     private void attack(Figure currentFigure, Figure attackedFigure) {
         int points = currentFigure.attack(attackedFigure);
 
         currentPlayer.increaseScore(points);
-        showMessageOnScreen( String.format("Left health %d", attackedFigure.getHealth()));
+        showMessageOnScreen(String.format("Left health %d", attackedFigure.getHealth()));
         this.stats.increaseNumberOfRounds();
 
         if (attackedFigure.getHealth() <= 0) {
@@ -244,11 +247,12 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * method that process moving
+     *
      * @param currentFigure currentFigure to be moved
-     * @param desiredRow desired row
-     * @param desiredCol desired col
-     * @param currentRow current row
-     * @param currentCol current col
+     * @param desiredRow    desired row
+     * @param desiredCol    desired col
+     * @param currentRow    current row
+     * @param currentCol    current col
      */
     private void processMoving(Figure currentFigure, int desiredRow, int desiredCol, int currentRow, int currentCol) {
         if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
@@ -256,11 +260,10 @@ public class Game extends JFrame implements MouseListener {
             if (desiredField.isObstacle()) {
 
                 showMessageOnScreen("Obstacle in your desired destination,destroy it!");
-                //iznesi tezi otgore
 
 
             } else if (!desiredField.isFieldFree()) {
-                showMessageOnScreen( "Opponent unit in your desired destination,kill it!");
+                showMessageOnScreen("Opponent unit in your desired destination,kill it!");
 
             } else {
                 this.stats.increaseNumberOfRounds();
@@ -274,7 +277,6 @@ public class Game extends JFrame implements MouseListener {
 
             showMessageOnScreen("Invalid move!");
 
-
         }
         clearChosenFields();
     }
@@ -287,11 +289,11 @@ public class Game extends JFrame implements MouseListener {
             Random random = new Random();
             healUnit(random);
 
-            showMessageOnScreen( String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
+            showMessageOnScreen(String.format("Healed! Health: %d ", currentField.getCurrentFigure().getHealth()));
             this.stats.increaseNumberOfRounds();
 
-            if (random.nextInt(2) == 0) {
-                showMessageOnScreen( "You are lucky!Your opponent lost turn!");
+            if (random.nextInt(2) == 1) {
+                showMessageOnScreen("You are lucky!Your opponent lost turn!");
 
             } else {
                 currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
@@ -307,6 +309,7 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * remove figures from player collections
+     *
      * @param figure figure
      * @param player player
      */
@@ -324,10 +327,11 @@ public class Game extends JFrame implements MouseListener {
 
     /**
      * show messages of the screen
+     *
      * @param message text
      */
-    private void showMessageOnScreen(String message){
-        JOptionPane.showMessageDialog(this,message);
+    private void showMessageOnScreen(String message) {
+        JOptionPane.showMessageDialog(this, message);
     }
 
 
@@ -455,7 +459,7 @@ public class Game extends JFrame implements MouseListener {
             fields[row][col].setCurrentFigure(currentField.getCurrentFigure());
 
         } else {
-            showMessageOnScreen( "Invalid position!");
+            showMessageOnScreen("Invalid position!");
         }
     }
 
