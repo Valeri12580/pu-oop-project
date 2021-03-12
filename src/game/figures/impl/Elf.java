@@ -12,6 +12,14 @@ public class Elf extends Figure {
 
     @Override
     public boolean isValidMove(int currentRow, int currentCol, int desiredRow, int desiredCol) {
-        return false;
+        int resultY=Math.abs(currentRow-desiredRow);
+        int resultX=Math.abs(currentCol-desiredCol);
+
+        boolean mainDiagonalResult=(resultY==3 && resultX==0)||(resultY==0 && resultX==3);
+
+        boolean gDialognalResult=(resultY==2 && resultX==1) || (resultY==1 && resultX==2);
+
+
+        return mainDiagonalResult || gDialognalResult;
     }
 }

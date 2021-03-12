@@ -3,6 +3,7 @@ package game.figures;
 import game.player.Player;
 
 import java.awt.*;
+import java.util.Random;
 
 public abstract class Figure {
 
@@ -17,6 +18,8 @@ public abstract class Figure {
     private int health;
     private int attackRange;
     private int speed;
+
+    private int score=0;
 
     public Figure(String type, Color color, int attackPower, int armor, int health, int attackRange, int speed) {
         this.type = type;
@@ -79,5 +82,45 @@ public abstract class Figure {
      */
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public void attack(Figure attackedFigure) {
+        int damage=rowDice(attackedFigure.health,this.attackPower- attackedFigure.armor);
+
+        attackedFigure.setHealthAfterAttack(damage);
+        this.score+=damage;
+
+
+    }
+
+    private int rowDice(int health,int damage){
+        int maxDiceValue=(health/3)+1;
+        Random random=new Random();
+        int first =random.nextInt(maxDiceValue);
+        int second =random.nextInt(maxDiceValue);
+        int third =random.nextInt(maxDiceValue);
+
+        int sum=first+second+third;
+
+        if(sum==health){
+            return 0;
+        }else if(sum==1){
+            return damage/2;
+        }
+
+        return damage;
+
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealthAfterAttack(int damage){
+        this.health-=damage;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

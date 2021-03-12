@@ -121,6 +121,7 @@ public class Game extends JFrame implements MouseListener {
      */
     private void startPlayersTurns() {
         while (playerOne.areFiguresEmpty() || playerTwo.areFiguresEmpty()) {
+
             ChooseActionDialog chooseActionDialog = new ChooseActionDialog(this, String.format("Player %d -- Choose Action", currentPlayer.getId()), true);
             action = chooseActionDialog.getChosenAction();
 
@@ -134,16 +135,14 @@ public class Game extends JFrame implements MouseListener {
                 continue;
             }
 
-            if (action.equals(ActionEnum.ATTACK) && !currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
-                System.out.println("Attack");
-
-            } else if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+            if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
                 if (action.equals(ActionEnum.HEAL)) {
-                    System.out.println("Heal");
+
                     Random random = new Random();
                     healUnit(random);
-
+                    System.out.println("Heal");
+                    System.out.println(currentField.getCurrentFigure().getHealth());
                     if (random.nextInt(2) == 0) {
                         currentField = null;
                         desiredField = null;
@@ -157,12 +156,13 @@ public class Game extends JFrame implements MouseListener {
                 System.out.println("invalid!!");
                 continue;
             }
-
-            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-            currentField = null;
-            desiredField = null;
+//
+//            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+//            currentField = null;
+//            desiredField = null;
 
             this.stats.increaseNumberOfRounds();
+            System.out.println(this.stats.getNumberOfRounds());
         }
 
         showEndGameResults();
@@ -191,21 +191,68 @@ public class Game extends JFrame implements MouseListener {
             int currentRow = currentField.getY();
             int currentCol = currentField.getX();
 
-            if (ActionEnum.MOVE.equals(action) && currentFigure!=null &&currentFigure.getOwner().equals(currentPlayer)) {
-                System.out.println("desired move");
-                if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol) && desiredField.isFieldFree() && !desiredField.isObstacle()) {
-                    System.out.println("valid");
-                    desiredField.setCurrentFigure(currentFigure);
-                    currentField.setCurrentFigure(null);
+            if (ActionEnum.MOVE.equals(action) && currentFigure != null && currentFigure.getOwner().equals(currentPlayer)) {
+
+                if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
+
+                    if (desiredField.isObstacle()) {
+
+                        JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
+                        currentField = null;
+                        desiredField = null;
+
+                    } else if (!desiredField.isFieldFree()) {
+                        JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
+                        currentField = null;
+                        desiredField = null;
+                    } else {
+                        desiredField.setCurrentFigure(currentFigure);
+                        currentField.setCurrentFigure(null);
+                        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+
+                    }
+
                 } else {
-                    System.out.println("Invalid position");
+
+                    JOptionPane.showMessageDialog(this, "Invalid move!");
+
+                    currentField = null;
+                    desiredField = null;
+                    //toq return precakva vsichko
+
+                    return;
+
+                }
+
+
+            } else if (ActionEnum.ATTACK.equals(action)) {
+                if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+                    Figure attackedFigure = desiredField.getCurrentFigure();
+
+
+                    currentFigure.attack(attackedFigure);
+                    JOptionPane.showMessageDialog(this,String.format("Left health %d",attackedFigure.getHealth()));
+
+                    if (attackedFigure.getHealth() <= 0) {
+
+                        desiredField.setCurrentFigure(null);
+                        stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
+                    }
+
+
+                    currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+                } else {
+                    JOptionPane.showMessageDialog(this, "You cant choose your units");
                 }
 
 
             }
 
+//            System.out.println("after");
             currentField = null;
             desiredField = null;
+//            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+//            this.stats.increaseNumberOfRounds();
 
 
         }

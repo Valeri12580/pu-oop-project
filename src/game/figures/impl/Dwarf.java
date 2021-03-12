@@ -11,6 +11,9 @@ public class Dwarf extends Figure {
 
     @Override
     public boolean isValidMove(int currentRow, int currentCol, int desiredRow, int desiredCol) {
-        return false;
+        int resultY=Math.abs(currentRow-desiredRow);
+        int resultX=Math.abs(currentCol-desiredCol);
+
+        return (resultY==2 && resultX==0)||(resultY==0 && resultX==2);
     }
 }
