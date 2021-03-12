@@ -6,15 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stats {
-    private int opponentPoints;
+    private int firstPlayerPoints;
+    private int secondPlayerPoints;
     private int numberOfRounds;
-    private List<Figure> destroyedOpponentsFigures;
-    private List<Figure> destroyedMineFigures;
+    private List<Figure> destroyedOFirstPlayerFigures;
+    private List<Figure> destroyedSecondFigures;
 
     public Stats() {
+
         this.numberOfRounds=0;
-        this.opponentPoints=0;
-        this.destroyedMineFigures=new ArrayList<>();
-        this.destroyedOpponentsFigures=new ArrayList<>();
+        this.secondPlayerPoints=0;
+        this.firstPlayerPoints=0;
+        this.destroyedSecondFigures =new ArrayList<>();
+        this.destroyedOFirstPlayerFigures =new ArrayList<>();
+    }
+
+    /**
+     * increase the number of rounds
+     */
+    public void increaseNumberOfRounds(){
+        numberOfRounds++;
     }
 }

@@ -1,7 +1,6 @@
 package game.player;
 
 import game.figures.Figure;
-import game.stats.Stats;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,12 +13,8 @@ public class Player {
 
     private Point playerField;
 
-    private Stats stats;
-
-
     public Player(int id, int playerFieldFrom, int playerFieldTo) {
         this.id = id;
-        this.stats = new Stats();
         this.figures = new ArrayList<>();
         playerField = new Point(playerFieldFrom, playerFieldTo);
 

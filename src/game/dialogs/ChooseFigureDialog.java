@@ -24,6 +24,9 @@ public class ChooseFigureDialog extends JDialog {
 
     }
 
+    /**
+     * setter for the buttons
+     */
     private void setButtons() {
         availableFigures.getFigures().forEach(e -> {
             JButton jButton = new JButton(e.getTypeName());
@@ -37,6 +40,10 @@ public class ChooseFigureDialog extends JDialog {
 
     }
 
+    /**
+     * get figure
+     * @return specific figure
+     */
     public Figure getChosenFigure() {
 
         return availableFigures.getSpecificFigure(chosenFigure);

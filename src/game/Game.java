@@ -2,10 +2,12 @@ package game;
 
 import game.dialogs.ChooseActionDialog;
 import game.dialogs.ChooseFigureDialog;
+import game.dialogs.EndGameDialog;
 import game.field.Field;
 import game.figures.Figure;
 import game.figures.FigureInitializer;
 import game.player.Player;
+import game.stats.Stats;
 import game.util.ActionEnum;
 
 import javax.swing.*;
@@ -16,6 +18,7 @@ import java.util.Random;
 
 public class Game extends JFrame implements MouseListener {
     private Field[][] fields;
+    private Stats stats;
 
     private Figure chosenFigure;
 
@@ -37,8 +40,12 @@ public class Game extends JFrame implements MouseListener {
 
     }
 
+    /**
+     * start the game
+     */
     public void start() {
 
+        this.stats = new Stats();
         this.fields = new Field[7][9];
         initPlayers();
         initFields();
@@ -49,59 +56,87 @@ public class Game extends JFrame implements MouseListener {
 
     }
 
+    /**
+     * start player turns
+     */
     private void startPlayersTurns() {
-        while (playerOne.areFiguresEmpty() || playerTwo.areFiguresEmpty()) {
+//        while (playerOne.areFiguresEmpty() || playerTwo.areFiguresEmpty()) {
+//
+//
+//            ChooseActionDialog chooseActionDialog = new ChooseActionDialog(this, String.format("Player %d -- Choose Action", currentPlayer.getId()), true);
+//            ActionEnum action = chooseActionDialog.getChosenAction();
+//
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            if (chosenFigure == null) {
+//                continue;
+//            }
+//
+//            if (action.equals(ActionEnum.ATTACK) && !chosenFigure.getOwner().equals(currentPlayer)) {
+//                System.out.println("Attack");
+//
+//            } else if (chosenFigure.getOwner().equals(currentPlayer)) {
+//
+//                if (action.equals(ActionEnum.HEAL)) {
+//                    System.out.println("Heal");
+//                    Random random = new Random();
+//                    healUnit(random);
+//
+//                    if (random.nextInt(2) == 0) {
+//                        chosenFigure = null;
+//                        continue;
+//                    }
+//
+//                } else if (action.equals(ActionEnum.MOVE)) {
+//                    System.out.println("move!!");
+//                    moveUnit();
+//
+//
+//                }
+//            } else {
+//                chosenFigure = null;
+//                System.out.println("invalid!!");
+//                continue;
+//            }
+//
+//            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+//            chosenFigure = null;
+//
+//            this.stats.increaseNumberOfRounds();
+//        }
 
-            ChooseActionDialog chooseActionDialog = new ChooseActionDialog(this, String.format("Player %d -- Choose Action", currentPlayer.getId()), true);
-            ActionEnum action = chooseActionDialog.getChosenAction();
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (chosenFigure == null) {
-                continue;
-            }
-
-            if (action.equals(ActionEnum.ATTACK) && !chosenFigure.getOwner().equals(currentPlayer)) {
-                System.out.println("Attack");
-
-            } else if (chosenFigure.getOwner().equals(currentPlayer)) {
-
-                if (action.equals(ActionEnum.HEAL)) {
-                    System.out.println("Heal");
-                    Random random = new Random();
-                    healUnit(random);
-
-                    if (random.nextInt(2) == 0) {
-                        chosenFigure = null;
-                        continue;
-                    }
-
-                } else if (action.equals(ActionEnum.MOVE)) {
-                    System.out.println("move!!");
-                    moveUnit();
+        showEndGameResults();
 
 
-                }
-            } else {
-                chosenFigure = null;
-                System.out.println("invalid!!");
-                continue;
-            }
-
-            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-            chosenFigure = null;
-        }
     }
 
+    /**
+     * showing end game results
+     */
+    private void showEndGameResults() {
+        EndGameDialog endGameDialog = new EndGameDialog(this, (e) -> {
+            this.start();
+
+        });
+    }
+
+    /**
+     * method that move unit
+     *
+     */
     private void moveUnit() {
 
 
     }
 
+    /**
+     * heal the unit
+     * @param random random number that indicate the health point to be recovered
+     */
     private void healUnit(Random random) {
 
         int healPoints = random.nextInt(6) + 1;
@@ -109,6 +144,9 @@ public class Game extends JFrame implements MouseListener {
         System.out.println("heal unit!!");
     }
 
+    /**
+     * generator of obstacles
+     */
     private void generateObstacles() {
         Random random = new Random();
         int countOfObstacles = random.nextInt(4) + 1;
@@ -124,6 +162,9 @@ public class Game extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * initialization of the player figures
+     */
     private void initPlayerFigures() {
         isInitializationPhase = true;
         FigureInitializer playerOneInitializer = new FigureInitializer(Color.BLUE);
@@ -148,7 +189,7 @@ public class Game extends JFrame implements MouseListener {
             chosenFigure = dialog.getChosenFigure();
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -161,12 +202,18 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * initialization of fields
+     */
     private void initFields() {
         generateSpecificPlayerField(0, 1);
         generateBattleField();
         generateSpecificPlayerField(5, 6);
     }
 
+    /**
+     * generate the battlefield
+     */
     private void generateBattleField() {
         for (int row = 2; row <= 4; row++) {
             for (int col = 0; col < 9; col++) {
@@ -176,6 +223,11 @@ public class Game extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * generate each field for the player
+     * @param fromRow from start position
+     * @param toRow end position
+     */
     private void generateSpecificPlayerField(int fromRow, int toRow) {
         Color currentColor = Color.GRAY;
         for (int row = fromRow; row <= toRow; row++) {
@@ -190,6 +242,9 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * initialization of the players
+     */
     private void initPlayers() {
         this.playerOne = new Player(1, 5, 6);
         this.playerTwo = new Player(2, 0, 1);
@@ -198,12 +253,19 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * windows initialization
+     */
     private void initWindow() {
         super.setSize(900, 700);
         super.setVisible(true);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * render method
+     * @param g instance of graphics
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -218,6 +280,10 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * handler
+     * @param e event
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         int row = e.getY() / Field.FIELD_SIZE;
@@ -235,6 +301,11 @@ public class Game extends JFrame implements MouseListener {
     }
 
 
+    /**
+     * set figures at player battefield
+     * @param row
+     * @param col
+     */
     private void setFigureAtPlayerBattleground(int row, int col) {
         if (currentPlayer.isInPlayerBattlefield(row) && fields[row][col].isFieldFree()) {
 
