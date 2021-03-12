@@ -131,18 +131,13 @@ public class Game extends JFrame implements MouseListener {
                 e.printStackTrace();
             }
 
+
             if (currentField == null) {
                 continue;
             }
 
-
-//
-//            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-//            currentField = null;
-//            desiredField = null;
-
             this.stats.increaseNumberOfRounds();
-            System.out.println(this.stats.getNumberOfRounds());
+
         }
 
         showEndGameResults();
@@ -163,97 +158,110 @@ public class Game extends JFrame implements MouseListener {
         } else {
 
             if (action.equals(ActionEnum.HEAL)) {
-                if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
 
+                if (currentField.getCurrentFigure().getOwner().equals(currentPlayer)) {
                     Random random = new Random();
                     healUnit(random);
-                    System.out.println("Heal");
-                    System.out.println(currentField.getCurrentFigure().getHealth());
+
+                    JOptionPane.showMessageDialog(this, String.format("Healed! Health - %d ", currentField.getCurrentFigure().getHealth()));
+                    this.stats.increaseNumberOfRounds();
+
                     if (random.nextInt(2) == 0) {
+                        JOptionPane.showMessageDialog(this, "You are lucky!Your opponent lost turn!");
                         currentField = null;
                         desiredField = null;
 
                     }
-                }else{
-                    JOptionPane.showMessageDialog(this,"You cant heal other unit!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "You cant heal other unit!");
                     currentField = null;
                     desiredField = null;
                 }
 
 
-            }
+            } else {
+                desiredField = fields[row][col];
 
-            desiredField = fields[row][col];
+                Figure currentFigure = currentField.getCurrentFigure();
 
-            Figure currentFigure = currentField.getCurrentFigure();
+                int desiredRow = desiredField.getY();
+                int desiredCol = desiredField.getX();
+                int currentRow = currentField.getY();
+                int currentCol = currentField.getX();
 
-            int desiredRow = desiredField.getY();
-            int desiredCol = desiredField.getX();
-            int currentRow = currentField.getY();
-            int currentCol = currentField.getX();
+                if (ActionEnum.MOVE.equals(action) && currentFigure.getOwner().equals(currentPlayer)) {
 
-            if (ActionEnum.MOVE.equals(action) && currentFigure != null && currentFigure.getOwner().equals(currentPlayer)) {
+                    if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
 
-                if (currentFigure.isValidMove(currentRow, currentCol, desiredRow, desiredCol)) {
+                        if (desiredField.isObstacle()) {
 
-                    if (desiredField.isObstacle()) {
+                            JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
+                            //iznesi tezi otgore
+                            currentField = null;
+                            desiredField = null;
 
-                        JOptionPane.showMessageDialog(this, "Obstacle in your desired destination,destroy it!");
+                        } else if (!desiredField.isFieldFree()) {
+                            JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
+                            currentField = null;
+                            desiredField = null;
+                        } else {
+                            desiredField.setCurrentFigure(currentFigure);
+                            currentField.setCurrentFigure(null);
+
+
+                            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
+
+                        }
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(this, "Invalid move!");
+
                         currentField = null;
                         desiredField = null;
+                        //toq return precakva vsichko
 
-                    } else if (!desiredField.isFieldFree()) {
-                        JOptionPane.showMessageDialog(this, "Opponent unit in your desired destination,kill it!");
+                        return;
+
+                    }
+
+
+                } else if
+                (ActionEnum.ATTACK.equals(action)) {
+
+
+                    if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
+                        Figure attackedFigure = desiredField.getCurrentFigure();
+
+
+                        currentFigure.attack(attackedFigure);
+                        JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
+
+                        if (attackedFigure.getHealth() <= 0) {
+
+                            desiredField.setCurrentFigure(null);
+                            stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
+                        }
+
+
+                        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
                         currentField = null;
                         desiredField = null;
                     } else {
-                        desiredField.setCurrentFigure(currentFigure);
-                        currentField.setCurrentFigure(null);
-                        currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-
+                        JOptionPane.showMessageDialog(this, "You cant choose your units");
+                        currentField = null;
+                        desiredField = null;
                     }
 
-                } else {
-
-                    JOptionPane.showMessageDialog(this, "Invalid move!");
-
-                    currentField = null;
-                    desiredField = null;
-                    //toq return precakva vsichko
-
-                    return;
 
                 }
 
 
-            } else if (ActionEnum.ATTACK.equals(action)) {
-                if (!desiredField.getCurrentFigure().getOwner().equals(currentPlayer)) {
-                    Figure attackedFigure = desiredField.getCurrentFigure();
-
-
-                    currentFigure.attack(attackedFigure);
-                    JOptionPane.showMessageDialog(this, String.format("Left health %d", attackedFigure.getHealth()));
-
-                    if (attackedFigure.getHealth() <= 0) {
-
-                        desiredField.setCurrentFigure(null);
-                        stats.addDestroyedFigure(attackedFigure, currentPlayer.getId());
-                    }
-
-
-                    currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-                } else {
-                    JOptionPane.showMessageDialog(this, "You cant choose your units");
-                }
+//                currentField = null;
+//                desiredField = null;
 
 
             }
-
-//            System.out.println("after");
-            currentField = null;
-            desiredField = null;
-//            currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
-//            this.stats.increaseNumberOfRounds();
 
 
         }
@@ -262,6 +270,11 @@ public class Game extends JFrame implements MouseListener {
         repaint();
     }
 
+
+    public void clearChosenFields(){
+        currentField = null;
+        desiredField = null;
+    }
 
     /**
      * method that move unit
